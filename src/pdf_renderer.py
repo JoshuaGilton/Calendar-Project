@@ -1,7 +1,7 @@
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
-from calendar import monthrange, day_name
+from calendar import month_name, monthrange
 
 
 def build_calendar_pdf(notes, zip_code, month, year, filename=None):
@@ -21,6 +21,11 @@ def build_calendar_pdf(notes, zip_code, month, year, filename=None):
     cell_width = grid_width / 7
     cell_height = grid_height / 5
 
+    # Title at the top center
+    month_str = month_name[month]
+    c.setFont("Helvetica-Bold", 24)
+    c.drawCentredString(width / 2, height - margin / 2, f"{month_str} {year}")
+
     # Draw day names
     for i, day in enumerate(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]):
         c.setFont("Helvetica-Bold", 12)
@@ -36,7 +41,6 @@ def build_calendar_pdf(notes, zip_code, month, year, filename=None):
             c.setStrokeColor(colors.black)
             c.rect(x, y - cell_height, cell_width, cell_height, stroke=1, fill=0)
             # Only fill in valid days
-            cell_num = row * 7 + col
             if (row == 0 and col < first_weekday) or day_counter > num_days:
                 continue
             # Date string
