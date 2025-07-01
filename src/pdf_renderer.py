@@ -2,6 +2,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
 from calendar import monthrange, day_name
+import math
 
 
 def build_calendar_pdf(notes, zip_code, month, year, filename=None):
@@ -19,7 +20,6 @@ def build_calendar_pdf(notes, zip_code, month, year, filename=None):
     grid_width = width - 2 * margin
     grid_height = height - 2 * margin - 40
     cell_width = grid_width / 7
-    cell_height = grid_height / 5
 
     # Draw day names
     for i, day in enumerate(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]):
@@ -28,8 +28,11 @@ def build_calendar_pdf(notes, zip_code, month, year, filename=None):
 
     # Get first weekday and number of days
     first_weekday, num_days = monthrange(year, month)
+    rows_needed = math.ceil((first_weekday + num_days) / 7)
+    cell_height = grid_height / rows_needed
+
     day_counter = 1
-    for row in range(5):
+    for row in range(rows_needed):
         for col in range(7):
             x = grid_left + col * cell_width
             y = grid_top - row * cell_height
