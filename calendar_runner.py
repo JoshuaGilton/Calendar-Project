@@ -1,6 +1,7 @@
 import argparse
 from src.generator import generate_calendar
 
+
 def main():
     parser = argparse.ArgumentParser(description="Generate a ZIP-specific nature calendar.")
     parser.add_argument("-z", "--zip", type=str, default="63901", help="5-digit ZIP code (default: 63901)")
@@ -10,6 +11,7 @@ def main():
 
     generate_calendar(zip_code=args.zip, month=args.month, year=args.year)
     print("✅ Calendar generation complete.")
+
 
 if __name__ == "__main__":
     main()
