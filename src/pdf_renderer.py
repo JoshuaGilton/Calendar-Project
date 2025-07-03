@@ -1,4 +1,4 @@
-from reportlab.lib.pagesizes import letter
+from reportlab.lib.pagesizes import letter, landscape
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
 from calendar import monthrange, day_name
@@ -21,7 +21,7 @@ def build_calendar_pdf(notes, zip_code, month, year, filename=None):
     """
     if filename is None:
         filename = f"calendar_{zip_code}_{year}_{month:02d}.pdf"
-    c = canvas.Canvas(filename, pagesize=letter)
+    c = canvas.Canvas(filename, pagesize=landscape(letter))
     width, height = letter
 
     cfg = LAYOUT_CONFIG
