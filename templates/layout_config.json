@@ -1,0 +1,16 @@
+{
+  "page_margin": 40,
+  "header_height": 40,
+  "rows": 5,
+  "cols": 7,
+  "cell_size": {
+    "width": 76,
+    "height": 134
+  },
+  "fonts": {
+    "day_name": {"name": "Helvetica-Bold", "size": 12},
+    "date": {"name": "Helvetica-Bold", "size": 14},
+    "note": {"name": "Helvetica", "size": 10},
+    "icon": {"name": "Helvetica-Oblique", "size": 8}
+  }
+}
