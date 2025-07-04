@@ -39,3 +39,43 @@ python calendar_runner.py --zip 12345 --month 7 --year 2025
 ```
 
 This will read notes for ZIP code `12345` from the configured source and output a PDF calendar.
+
+## `templates/layout_config.json`
+
+The PDF layout is controlled by `templates/layout_config.json`. The file
+defines page margins, header height, grid dimensions, cell sizes and the fonts
+used for different parts of the calendar. Editing this JSON allows you to
+change the look of the generated calendar.
+
+Example snippet of the default configuration:
+
+```json
+{
+  "page_margin": 40,
+  "header_height": 40,
+  "rows": 5,
+  "cols": 7,
+  "cell_size": {"width": 76, "height": 134},
+  "fonts": {
+    "day_name": {"name": "Helvetica-Bold", "size": 12},
+    "date": {"name": "Helvetica-Bold", "size": 14},
+    "note": {"name": "Helvetica", "size": 10},
+    "icon": {"name": "Helvetica-Oblique", "size": 8}
+  }
+}
+```
+
+To use different fonts or adjust cell dimensions, modify the file like so:
+
+```json
+{
+  "fonts": {
+    "day_name": {"name": "Courier-Bold", "size": 12},
+    "date": {"name": "Courier-Bold", "size": 16}
+  },
+  "cell_size": {"width": 90, "height": 150}
+}
+```
+
+After saving your changes, run `calendar_runner.py` again to generate a calendar
+with the new layout.
