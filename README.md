@@ -39,3 +39,12 @@ python calendar_runner.py --zip 12345 --month 7 --year 2025
 ```
 
 This will read notes for ZIP code `12345` from the configured source and output a PDF calendar.
+
+## Running tests
+
+Install dependencies and run the unit tests with `pytest`:
+
+```bash
+pip install -r requirements.txt
+pytest
+```
