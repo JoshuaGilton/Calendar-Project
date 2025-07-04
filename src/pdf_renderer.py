@@ -1,12 +1,14 @@
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
-from calendar import monthrange, day_name
+from calendar import monthrange
 import json
 from pathlib import Path
 
 # Load layout configuration
-CONFIG_PATH = Path(__file__).resolve().parents[1] / "templates" / "layout_config.json"
+CONFIG_PATH = (
+    Path(__file__).resolve().parents[1] / "templates" / "layout_config.json"
+)
 try:
     with open(CONFIG_PATH) as f:
         LAYOUT_CONFIG = json.load(f)
@@ -31,10 +33,16 @@ def build_calendar_pdf(notes, zip_code, month, year, filename=None):
     cols = cfg.get("cols", 7)
 
     fonts_cfg = cfg.get("fonts", {})
-    day_font = fonts_cfg.get("day_name", {"name": "Helvetica-Bold", "size": 12})
+    day_font = fonts_cfg.get(
+        "day_name",
+        {"name": "Helvetica-Bold", "size": 12},
+    )
     date_font = fonts_cfg.get("date", {"name": "Helvetica-Bold", "size": 14})
     note_font = fonts_cfg.get("note", {"name": "Helvetica", "size": 10})
-    icon_font = fonts_cfg.get("icon", {"name": "Helvetica-Oblique", "size": 8})
+    icon_font = fonts_cfg.get(
+        "icon",
+        {"name": "Helvetica-Oblique", "size": 8},
+    )
 
     grid_top = height - margin - header_height
     grid_left = margin
@@ -52,7 +60,11 @@ def build_calendar_pdf(notes, zip_code, month, year, filename=None):
     # Draw day names
     for i, day in enumerate(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]):
         c.setFont(day_font["name"], day_font["size"])
-        c.drawCentredString(grid_left + cell_width * (i + 0.5), grid_top + 20, day)
+        c.drawCentredString(
+            grid_left + cell_width * (i + 0.5),
+            grid_top + 20,
+            day,
+        )
 
     # Get first weekday and number of days
     first_weekday, num_days = monthrange(year, month)
@@ -62,7 +74,14 @@ def build_calendar_pdf(notes, zip_code, month, year, filename=None):
             x = grid_left + col * cell_width
             y = grid_top - row * cell_height
             c.setStrokeColor(colors.black)
-            c.rect(x, y - cell_height, cell_width, cell_height, stroke=1, fill=0)
+            c.rect(
+                x,
+                y - cell_height,
+                cell_width,
+                cell_height,
+                stroke=1,
+                fill=0,
+            )
             # Only fill in valid days
             if (row == 0 and col < first_weekday) or day_counter > num_days:
                 continue
@@ -81,7 +100,11 @@ def build_calendar_pdf(notes, zip_code, month, year, filename=None):
             # Reserve bottom right for icons (placeholder)
             c.setFont(icon_font["name"], icon_font["size"])
             c.setFillColor(colors.grey)
-            c.drawRightString(x + cell_width - 5, y - cell_height + 14, "[icon]")
+            c.drawRightString(
+                x + cell_width - 5,
+                y - cell_height + 14,
+                "[icon]",
+            )
             c.setFillColor(colors.black)
             day_counter += 1
     c.save()
