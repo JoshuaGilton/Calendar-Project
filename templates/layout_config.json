@@ -2,6 +2,7 @@
   "page_margin": 40,
   "header_height": 40,
   "rows": 5,
+  "dynamic_rows": true,
   "cols": 7,
   "cell_size": {
     "width": 76,

@@ -3,6 +3,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib import colors
 from calendar import monthrange, day_name
 import json
+import math
 from pathlib import Path
 
 # Load layout configuration
@@ -16,7 +17,8 @@ except FileNotFoundError:
 
 def build_calendar_pdf(notes, zip_code, month, year, filename=None):
     """
-    Draws a 7x5 grid calendar PDF for the given notes dict.
+    Draws a 7-column calendar PDF for the given notes dict. The number of rows
+    expands as needed based on the month.
     notes: dict of YYYY-MM-DD -> {Line_1, Line_2}
     """
     if filename is None:
@@ -36,26 +38,35 @@ def build_calendar_pdf(notes, zip_code, month, year, filename=None):
     note_font = fonts_cfg.get("note", {"name": "Helvetica", "size": 10})
     icon_font = fonts_cfg.get("icon", {"name": "Helvetica-Oblique", "size": 8})
 
+    # Determine how many rows are needed for this month
+    first_weekday, num_days = monthrange(year, month)
+    first_weekday = (first_weekday + 1) % 7
+    rows_needed = math.ceil((first_weekday + num_days) / cols)
+    rows = max(rows, rows_needed)
+
     grid_top = height - margin - header_height
     grid_left = margin
     grid_width = width - 2 * margin
-    grid_height = height - 2 * margin - header_height
+    grid_height_available = height - 2 * margin - header_height
 
     cell_cfg = cfg.get("cell_size", {})
+
     cell_width = cell_cfg.get("width", grid_width / cols)
-    cell_height = cell_cfg.get("height", grid_height / rows)
     if "width" in cell_cfg:
         grid_width = cell_width * cols
-    if "height" in cell_cfg:
-        grid_height = cell_height * rows
+
+    # Height handling supports dynamic row counts
+    cell_height = cell_cfg.get("height", grid_height_available / rows)
+    if cell_height * rows > grid_height_available:
+        cell_height = grid_height_available / rows
+    grid_height = cell_height * rows
 
     # Draw day names
     for i, day in enumerate(["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]):
         c.setFont(day_font["name"], day_font["size"])
         c.drawCentredString(grid_left + cell_width * (i + 0.5), grid_top + 20, day)
 
-    # Get first weekday and number of days
-    first_weekday, num_days = monthrange(year, month)
+    # Grid drawing
     day_counter = 1
     for row in range(rows):
         for col in range(cols):
