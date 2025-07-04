@@ -56,6 +56,7 @@ def build_calendar_pdf(notes, zip_code, month, year, filename=None):
 
     # Get first weekday and number of days
     first_weekday, num_days = monthrange(year, month)
+    first_weekday = (first_weekday + 1) % 7  # convert Monday=0 to Sunday=0
     day_counter = 1
     for row in range(rows):
         for col in range(cols):
