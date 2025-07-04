@@ -1,5 +1,4 @@
 import json
-import os
 from pathlib import Path
 from calendar import monthrange
 from typing import Dict
@@ -9,8 +8,14 @@ import requests
 # Example static data for demonstration
 STATIC_NOTES = {
     "12345": {
-        "2025-07-01": {"Line_1": "Bird migration peak", "Line_2": "Fishing: Trout season"},
-        "2025-07-02": {"Line_1": "Wildflowers bloom", "Line_2": "Hunting: Deer archery"},
+        "2025-07-01": {
+            "Line_1": "Bird migration peak",
+            "Line_2": "Fishing: Trout season",
+        },
+        "2025-07-02": {
+            "Line_1": "Wildflowers bloom",
+            "Line_2": "Hunting: Deer archery",
+        },
         # ... more days ...
     },
     # ... more zip codes ...
@@ -52,7 +57,11 @@ def _load_external_notes(source: str) -> Dict[str, Dict[str, str]]:
     return {}
 
 
-def get_notes_for_zip(zip_code: str, month: int, year: int) -> Dict[str, Dict[str, str]]:
+def get_notes_for_zip(
+    zip_code: str,
+    month: int,
+    year: int,
+) -> Dict[str, Dict[str, str]]:
     """Returns a dict mapping YYYY-MM-DD to notes for each day."""
 
     notes: Dict[str, Dict[str, str]] = {}
@@ -73,9 +82,15 @@ def get_notes_for_zip(zip_code: str, month: int, year: int) -> Dict[str, Dict[st
         # Pin hunting/fishing to Line_2 if present
         line_1 = day_note.get("Line_1", "")
         line_2 = day_note.get("Line_2", "")
-        if ("hunting" in line_1.lower() or "fishing" in line_1.lower()) and not line_2:
+        if (
+            "hunting" in line_1.lower()
+            or "fishing" in line_1.lower()
+        ) and not line_2:
             line_2, line_1 = line_1, ""
-        elif ("hunting" in line_2.lower() or "fishing" in line_2.lower()) and line_1:
+        elif (
+            "hunting" in line_2.lower()
+            or "fishing" in line_2.lower()
+        ) and line_1:
             pass  # already in Line_2
         notes[date_str] = {"Line_1": line_1, "Line_2": line_2}
     return notes
