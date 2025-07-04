@@ -2,6 +2,14 @@
 
 This project generates a PDF nature calendar for a given ZIP code. Notes for each ZIP code can come from local JSON files or remote URLs.
 
+## Install dependencies
+
+Before running `calendar_runner.py`, install the required packages:
+
+```bash
+pip install -r requirements.txt
+```
+
 ## `data/zip_sources.json`
 
 `zip_sources.json` maps ZIP codes to the JSON file or URL that contains the calendar notes. Relative paths are resolved from the `data` directory.
